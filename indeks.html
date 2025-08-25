@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fish Feeder Control</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+</head>
+<body>
+  <h2>🐟 Fish Feeder Control Panel</h2>
+
+  <button onclick="feedNow()">Feed Now</button>
+
+  <h3>Scheduled Times:</h3>
+  <ul>
+    <li id="timer0">Loading...</li>
+    <li id="timer1">Loading...</li>
+    <li id="timer2">Loading...</li>
+  </ul>
+
+  <script>
+    // 1. Config Firebase
+    const firebaseConfig = {
+      piKey: "AIzaSyDO2ZbFdM7pt8-sCHfPw9VJ4ET_EmBqiv0",
+  authDomain: "stars-fish-feeder-341f8.firebaseapp.com",
+  databaseURL: "https://stars-fish-feeder-341f8-default-rtdb.firebaseio.com",
+  projectId: "stars-fish-feeder-341f8",
+  storageBucket: "stars-fish-feeder-341f8.firebasestorage.app",
+  messagingSenderId: "342841431709",
+  appId: "1:342841431709:web:f29118772884dce1bd2674",
+  measurementId: "G-50ZJRELQX1"
+    };
+
+    // 2. Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // 3. Function untuk 'Feed Now'
+    function feedNow() {
+      database.ref("feednow").set(1);
+      alert("Feeding triggered!");
+    }
+
+    // 4. Papar timers
+    function loadTimers() {
+      for (let i = 0; i < 3; i++) {
+        const path = "timers/timer" + i;
+        database.ref(path).on("value", (snapshot) => {
+          document.getElementById("timer" + i).innerText = snapshot.val();
+        });
+      }
+    }
+
+    loadTimers();
+  </script>
+</body>
+</html>
